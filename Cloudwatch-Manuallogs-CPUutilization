@@ -1,1 +1,74 @@
+Checking CPU-utilization through logs
+--------------------------------------
 
+sudo yum update -y
+sudo yum install aws-cli -y
+sudo yum install python3-pip -y
+pip3 install awscli
+aws configure
+example
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-west-2
+Default output format [None]: json
+------------------------------------
+sudo yum install python3-pip -y
+pip3 install boto3
+nano cloudwatch_logger.py
+------------------------
+import boto3
+import time
+from datetime import datetime
+
+# Configuration
+LOG_GROUP = '/aws/myapp/logs'
+LOG_STREAM = 'application-log-stream'
+REGION = 'us-west-2'
+INSTANCE_ID = 'i-0068f8fa7ecf39118'
+
+
+# Initialize CloudWatch Logs client
+client = boto3.client('logs', region_name=REGION)
+
+# Create log group and log stream if they don't exist
+def create_log_group_and_stream():
+    try:
+        client.create_log_group(logGroupName=LOG_GROUP)
+    except client.exceptions.ResourceAlreadyExistsException:
+        print(f'Log group {LOG_GROUP} already exists.')
+
+    try:
+        client.create_log_stream(logGroupName=LOG_GROUP, logStreamName=LOG_STREAM)
+    except client.exceptions.ResourceAlreadyExistsException:
+        print(f'Log stream {LOG_STREAM} already exists.')
+
+# Send a log event to CloudWatch
+def put_log_event(message):
+    timestamp = int(time.time() * 1000)  # Current time in milliseconds
+    log_event = {
+        'logGroupName': LOG_GROUP,
+        'logStreamName': LOG_STREAM,
+        'logEvents': [
+            {
+                'timestamp': timestamp,
+                'message': message
+            }
+        ]
+    }
+    response = client.put_log_events(**log_event)
+    print(response)
+
+# Main function to send log data
+def main():
+    create_log_group_and_stream()
+    while True:
+        message = f'{datetime.utcnow().isoformat()} - Sample log entry'
+        put_log_event(message)
+        time.sleep(60)  # Log every 60 seconds
+
+if __name__ == '__main__':
+    main()
+------------------------------------------
+python3 cloudwatch_logger.py
+--------------------------------------
+go to consol and check in log groups 
