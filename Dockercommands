@@ -1,6 +1,7 @@
 -Create the Dockerfile:
 vi Dockerfile
 --------------------
+
 -Build the Docker Image
 docker build -t name:tag .
 docker build -t image1:latest
