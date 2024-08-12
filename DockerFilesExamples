@@ -9,6 +9,8 @@ RUN yum update -y && yum install java -y
 # "/" is used to write in next line
 RUN yum update -y && /
 yum install java -y
+#Mention env like Dev, Prod, UAT
+ENV dev
 #exposes port
 EXPOSE 8080
 #run commands in container
