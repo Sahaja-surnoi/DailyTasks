@@ -1,0 +1,22 @@
+-create docker bridge network
+docker run --name <containername> -p 80:8080 --network <networkname> <imagename>
+docker run --name bridgecontainer -p 80:8080 --network bridge image1:v1
+
+-create docker host network
+docker run --name <containername> -p 80:8080 --network <networkname> <imagename>
+docker run --name hostcontainer -p 80:8080 --network host image1:v1
+
+-create docker no network
+docker run --name <containername> -p 80:8080 --network <networkname> <imagename>
+docker run --name nonecontainer -p 80:8080 --network none image1:v1
+
+-To check in particular containers connection
+//Go to container by using
+docker exec -it <containerid> bin/bash (it-interactive terminal used to enter in to particular shell)
+
+//do ping here
+//select to ip addresses with same cidr range from 2 containers having same network
+//check connection is working or not by using ping
+ping <ip address of different container>
+
+// check if it is connecting or not
