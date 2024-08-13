@@ -9,14 +9,43 @@ docker run --name hostcontainer -p 80:8080 --network host image1:v1
 -create docker no network
 docker run --name <containername> -p 80:8080 --network <networkname> <imagename>
 docker run --name nonecontainer -p 80:8080 --network none image1:v1
+----------------------------------------------------------------------------------
 
+ Default bridge
+----------------
 -To check in particular containers connection
-//Go to container by using
+-open container1 and container2 and note ip addresses
+docker inspect <containerid>
+-Note 2 ipaddresses of 2 containers like c1-171.17.1.2 , c2-171.17.1.3
+-Go to c1 by using
 docker exec -it <containerid> bin/bash (it-interactive terminal used to enter in to particular shell)
+-do ping here
+-check connection is working or not by using ping
+ ping 171.17.1.3 -c 5
+-check if it is connecting or not
+--------------------------------------------------------------------------------------
 
-//do ping here
-//select to ip addresses with same cidr range from 2 containers having same network
-//check connection is working or not by using ping
-ping <ip address of different container>
+ Custom bridge
+----------------
+-To check in particular containers connection
+-open container1 with default bridge and container2 with custom bridge and note ip addresses
+docker inspect <containerid>
+-Note 2 ipaddresses of 2 containers like c1-171.17.1.2 , c2-172.17.1.3
+-Go to c1 by using
+docker exec -it <containerid> bin/bash (it-interactive terminal used to enter in to particular shell)
+-do ping here
+-check connection is working or not by using ping
+ ping 172.17.1.3 -c 5
+-check if it is connecting or not(it should not connect)
+----------------------------------------------------------------------------------------
 
-// check if it is connecting or not
+host bridge
+------------
+-if we open container and check for ip , no ip will be there because it will take host defaul eth0 address
+docker inspect <containerid> 
+---------------------------------------------------------------------------------------------
+
+None bridge
+-----------
+-we fo not have any networks , can check using
+docker inspect <containerid>
