@@ -1,0 +1,74 @@
+docker service
+     |
+   Tasks
+     |
+  Containers
+-------------------
+stack- combination of one or more services, networks, volumes
+services- combination of one or more tasks
+Tasks- Task is a definition to deploy a container
+Container- Container is an instance of task
+------------------------------------------
+We can use GUI for docker swarm known as "swarmpit"
+-go to browser and search swarmpit and paste the given command in manager node
+-take manager node instance ip with port 888 <ip:888>, we can check all the things here
+-------------------------------------------
+
+-To check which is manager node and worker node
+docker node ls
+---------------------
+-To initialize the node, it will be manager node, get ip address using 'ifconfig'
+docker swarm init --advertise-addr <ip ddress of instance>
+----------------------
+#we will get a command in output. copy and paste that command in worker node instance. 
+#Do check if worker node is available or not in manager node using
+
+docker node ls
+----------------------
+-create a service in manager node
+docker service create --name <nameofservice> alpine ping socker.com
+
+-check list of services
+docker service ls
+
+-check all the details of service
+docker inspect <servicename>
+--------------------------------
+-deploying stack
+docker stack deploy -c <composefilename> <stackname>
+docker stack deploy -c <docker-compose.yml> <mern_stack>
+
+-list of stacks
+docker stack ls
+
+-list stack details
+docker stack ps <stack name>
+
+-remove stack
+docker stack rm <stackname>
+
+docker stack services <stack name>
+
+-To remove worker node, go to worker node (node leaves the swarm)
+docker swarm leave
+
+-to remove node
+docker node rm <node name>
+
+-to remove manager node
+docker swarm leave --force
+--------------------------
+-list of networks
+docker network ls
+
+-create a network_overlay
+docker network create -d overlay <network name>
+
+-remove network
+docker network rm <network name>
+--------------------------------
+
+creating services based on replication-Replicaset
+creating services based on Global-Demonstrator
+
+
