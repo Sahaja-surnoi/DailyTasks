@@ -21,7 +21,7 @@ docker push myusername/name:tag
 docker push myusername/image1:latest
 ---------------------------
 
--Run the image (8080 for host level, 80 container level)
+-Run the image (8080 for container level, 80 host level)
 docker run -d --name containername -p 8080:80 myusername/name:tag
 docker run -d --name container1 -p 8080:80 sahajagarrepally/image1:latest
 ----------------------------
