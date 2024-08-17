@@ -20,7 +20,7 @@ deletes the volume
 -docker volume create <volume name>
 
 -docker run -d --mount source=<volumename>,target=/app <imagename>
--docker run -d --v source/target <imgename>
+-docker run -d --v source:/target <imgename>
 this container will have mount i.e disc or volume
 
 -docker inspect <name of the container>
