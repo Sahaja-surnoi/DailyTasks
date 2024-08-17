@@ -34,7 +34,6 @@ docker inspect <containerid>
 -Go to c1 by using
 docker exec -it <containerid> bin/bash (it-interactive terminal used to enter in to particular shell)
 -do ping here
--check connection is working or not by using ping
  ping 172.17.1.3 -c 5
 -check if it is connecting or not(it should not connect)
 ----------------------------------------------------------------------------------------
@@ -47,5 +46,5 @@ docker inspect <containerid>
 
 None bridge
 -----------
--we fo not have any networks , can check using
+-will not have any networks , can check using
 docker inspect <containerid>
