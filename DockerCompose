@@ -1,0 +1,81 @@
+Docker Compose is a tool for defining and running multi-container Docker applications. 
+It simplifies the process of managing complex applications that involve multiple services 
+by allowing you to define all the services, networks, and volumes in a single file, typically
+called docker-compose.yml. This file uses YAML syntax to specify how Docker containers should 
+be configured and connected.
+--------------------------------------------------------------------------------------
+-vi docker-compose.yml
+
+version: '3.8'
+
+services:
+  Java:
+    image: amazonlinux
+    ports:
+      - "8081:8080"
+    volumes:
+      - Javavol:/var/javavol
+    networks:
+      - Javanet
+
+  Jenkins:
+    image: amazonlinux
+    ports:
+      - "8080:8080"
+    volumes:
+      - Jenkinsvol:/var/jenkinsvol
+    networks:
+      - Jenkinsnet
+
+networks:
+  Javanet:
+  Jenkinsnet:
+
+volumes:
+  Javavol:
+  Jenkinsvol:
+-----------------------------------------------
+-starts the services defined in compose file
+docker-compose up
+
+-stop the services defined in compose file
+docker-compose down
+
+-starts existing containers defined in compose file
+docker-compose start
+
+-stops existing containers defined in compose file
+docker-compose stop
+
+-restart the services
+docker-compose restart
+
+-build or rebuilds the images from compose file
+docker-compose build
+
+-check the logs
+docker-compose logs
+
+-list running containers definesd in compose file
+docker-compose ps
+
+-executes a command ina a running container
+docker-compose exec <service> <command>
+
+-runs one of command against service
+docker-compose run <service> <command
+
+-scales number of containers for a service
+docker-compose scale <service>=<number>
+
+-validate and view compose file config
+docker-compose config
+
+-displays version
+docker-compose version
+
+-list of networks in compose file
+docker-compose network ls
+
+-shows running process for compose
+docker-compose top
