@@ -61,12 +61,17 @@ docker-compose ps
 
 -executes a command ina a running container
 docker-compose exec <service> <command>
+docker-compose exec web /bin/bash
 
 -runs one of command against service
-docker-compose run <service> <command
+docker-compose run <service> <command>
+docker-compose run --rm web python manage.py migrate
+docker-compose run --rm web python manage.py collectstatic --noinput
+--rm->removes container once executed
 
 -scales number of containers for a service
 docker-compose scale <service>=<number>
+docker-compose up --scale web=3
 
 -validate and view compose file config
 docker-compose config
