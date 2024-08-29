@@ -1,0 +1,41 @@
+-Read IOPS- number of read operations like retrieving
+-Write IOPS - number of write operations like data savings
+increase rds size to large(increase cpu,ram)
+-Burst balance- If data fetching and saving is high , it will use burst credits to speed up. but if burst credits are low and traffic is high then rds will become slow
+-Read latency- The amount of time taking for data retrival
+-Write latency- The amount of time taking for data insertion
+-DiskQueueDepth
+DiskQueueDepth is the average number of I/O operations (both read and write requests) waiting in the queue to be processed by the disk storage. Essentially, it indicates how many requests are lined up and waiting for their turn to be handled.
+Network Traffic Metrics:
+-NetworkReceiveThroughput: Rate of incoming network traffic (in bytes per second).
+-NetworkTransmitThroughput: Rate of outgoing network traffic (in bytes per second)
+-ReadThroughput: Rate of read data transferred (in bytes per second).
+    This metric shows how much data is being read to the database per second. It helps you understand the data write load on your database instance
+-WriteThroughput: Rate of write data transferred (in bytes per second).
+     This metric shows how much data is being written to the database per second. It helps you understand the data write load on your database instance
+-----------------------------------------------
+log output file-file
+slow_query_log-1
+log_error_verbosity-1
+general_log-1
+--------------------------------------------
+//Audit logs:
+User logins and logouts
+Changes to database schema (e.g., creating, altering, dropping tables)
+Execution of SQL commands
+Privilege changes
+
+//Error logs
+Server startup and shutdown information
+Critical errors, warnings, and system messages
+Connection issues
+Internal errors and failures
+
+//General Log
+Every SQL statement executed by the database
+Administrative commands (e.g., CREATE TABLE, DROP DATABASE
+
+//Slow Query Log
+Queries that took longer than the specified threshold to execute
+Query execution time
+Indexes used or missing
