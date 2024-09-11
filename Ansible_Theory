@@ -1,0 +1,78 @@
+Ansible
+-Configuration management tool-Agentless
+-Provisioning like ec2,s3
+-In cicd, Deploy artifacts in to multiple manage nodes or Kubernetes cluster
+-Network automation
+-------------------------------------------
+1.control node
+2.manage node-slaves-only python need to be installed
+------------------------------------------
+**Ansible vs Python vs Shell
+->Installing oracle
+
+Shell script: If os are diff like Linux and windows the same script wont work
+
+Python: Need to know pthon, maintenance req if python is updated, need to login to all the vm's and need to run python
+-Talking to API like raise jira and GitHub then we can use python over ansible
+
+Ansible: Need not login to all the vm's. we can use inventory where we mention all the ip addresses. agent less.
+---------------------------------------------------
+-> we can connect with or without password
+1.ssh key way
+2.password way
+--------------------------
+ssh -i <path to pem file> ubuntu@<ip address>
+
+#enable password authentication
+-> vim  /etc/ssh/sshd_config-> here un comment password authentication
+->sudo systemctl restart ssh
+
+#create password for ubuntu
+NP
+Retype
+Logout
+
+now if we do ssh-copy-id ubuntu@ip
+-it asks for password
+------------------------------------
+inventory
+1.inventory.ini
+vim inventory.ini
+[app]
+ubuntu@managenodeip
+[db]
+ubuntu@managenode2
+-it can be in any location and we can use it in ansible or /etc/ansible/hosts(default)
+2.yml
+-----------------------------------
+-In ansible there are 2 ways to give instrucytions
+1.playbooks-installing oracle which has so many commands
+2.Adhoc commands-simple commands like-> restarting, installing apache etc
+##syntax: 
+-ansible (inventoryfile location) (-m any module) -a(argument) servers
+-ansible (inventoryfile location) -m shell -a apt update db/all
+
+-ansible -i inventory.ini -m ping(exact command) all(what are the servers)
+-ansible -i inventory.ini -m shell -a "apt install openjdk" all/ubuntu@managenodeip
+------------------------------------------
+Roles:
+take a ansible playbook->split them in to different sections and put them in a folder and put them in 1 umbrella
+-readability, modularity and sharing across the teams
+- ansible-galaxy role init <role name>
+- ls -ltr
+------------------------------------------
+execution of playbook
+ansible-playbook -i inventory.ini first-playbook.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
