@@ -1,0 +1,87 @@
+Playbooks
+-----------
+---
+ -name: first playbook
+ -hosts: all
+ -become: true
+ -tasks:
+      -name: install httpd
+       yum:
+           name: httpd
+           state: present
+      -name: start httpd
+       service:
+           name: httpd
+           state: started
+      -name: copying the files
+       service:
+           src: index.html
+           dest: /var/www/index.html
+           owner: root
+           group: root
+           mode: '0644'
+      -name: 
+       service:
+           name: httpd
+           state: restarted 
+----------------------------------------
+
+---
+ -name: httpd playbook
+ -hosts: all
+ -become: true
+ -tasks:
+   -name: install nginx
+    yum:
+      -name: nginx
+      -status: present
+   -name: start nginx
+    service:
+      -name: nginx
+      -status: started
+   -name: enable
+    service:
+      -name: nginx
+      -enabled: yes
+-----------------------------------
+---
+ -name: first playbook
+ -hosts: all
+ -become: true
+ -tasks:
+      -name: install httpd
+       yum:
+           name: httpd
+           state: present
+      -name: start httpd
+       service:
+           name: httpd
+           state: started
+      -name: copying the files
+       copy:
+           src: index.html
+           dest: /var/www/index.html
+       notify: Restart web server
+
+ -handlers:
+      -name: Restart webserver
+       service:
+           name: httpd
+           state: restarted
+-------------------------------------
+---
+ - name: installing git
+   hosts: web
+   become: true
+   tasks:
+
+     - name: git installation
+       ansible.builtin.package:
+         name: git
+         state: present
+
+     - name: git uninstallation
+       ansible.builtin.package:
+         name: git
+         state: absent
+--------------------------------------------
