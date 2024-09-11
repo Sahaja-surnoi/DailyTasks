@@ -1,0 +1,11 @@
+{
+ "Version": "",
+ "Statement": [
+     {
+       "Sid": "s1",
+       "Principal": "*",
+       "Action": "s3",
+       "Effect": "Allow"
+       "Resource": "ARN"
+}
+}
