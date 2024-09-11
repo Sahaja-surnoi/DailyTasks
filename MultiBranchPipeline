@@ -1,0 +1,219 @@
+multi branch
+-main advantage is that is that we can build and deploy multiple branches from single repository
+-diff env for diff branches
+
+git branch: 'main', credentialsId: 'Git-Access', url: 'https://github.com/Sahaja-surnoi/FusionIQ-BE1.git'
+
+multibranchscan webhook trigger plugin
+select scan by webhook
+----------------------------------------------
+
+pipeline {
+    agent none  // Define no default agent, as we'll specify them per stage
+
+    tools {
+        maven 'maven'
+    }
+
+    stages {
+        stage('Check out code from Git') {
+            agent { label 'dev-node' }  // Default node, can be overridden
+            steps {
+                script {
+                    // Checkout the branch from GitHub
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: "${env.BRANCH_NAME}"]],
+                              doGenerateSubmoduleConfigurations: false,
+                              extensions: [],
+                              userRemoteConfigs: [[url: 'https://github.com/Sahaja-surnoi/Hospital-BE.git', credentialsId: 'Git-Access']]
+                             ])
+                    // Stash the source code for later stages
+                    stash name: 'source-code1', includes: '**/*'
+                }
+            }
+        }
+        stage('Build artifact') {
+            agent {
+                label "${env.BRANCH_NAME == 'dev' ? 'dev-node' : 'test-node'}"  // Use dev-node for 'dev' branch, test-node otherwise
+            }
+            steps {
+                unstash 'source-code1'
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+---------------------------------------------------
+pipeline {
+    agent none  // Define no default agent, specify per stage
+
+    tools {
+        maven 'maven'
+    }
+
+    stages {
+        stage('Check out code from Git') {
+            agent { label 'dev-node' }  // Default node for checkout stage
+            steps {
+                script {
+                    // Checkout the branch from GitHub
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: "${env.BRANCH_NAME}"]],
+                              doGenerateSubmoduleConfigurations: false,
+                              extensions: [],
+                              userRemoteConfigs: [[url: 'https://github.com/Sahaja-surnoi/Hospital-BE.git', credentialsId: 'Git-Access']]
+                             ])
+                    // Stash the source code for later stages
+                    stash name: 'source-code1', includes: '**/*'
+                }
+            }
+        }
+        stage('Build artifact') {
+            agent {
+                label "${env.BRANCH_NAME == 'Dev' ? 'dev-node' : (env.BRANCH_NAME == 'Test' ? 'test-node' : (env.BRANCH_NAME == 'Prod' ? 'prod-node' : ''))}"
+                // Use:
+                // - 'dev-node' for 'dev' branch
+                // - 'test-node' for 'test' branch
+                // - 'prod-node' for 'prod' branch
+                // - Fail if none of these match
+            }
+            steps {
+                script {
+                    // Check if the label is empty, which indicates an unsupported branch
+                    if (!env.NODE_LABEL) {
+                        error "No suitable node found for branch: ${env.BRANCH_NAME}. Build failed."
+                    }
+                }
+                unstash 'source-code1'
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+-----------------------------------------------
+In summary, environment variables are best for configuration settings and passing values between steps and stages, while global variables are useful for storing values and logic that need to be accessed throughout the pipeline script execution.
+def myGlobalVar = 'some_value'  // Defining a global variable
+
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            steps {
+                script {
+                    echo "${myGlobalVar}"  // Accessing the global variable
+                }
+            }
+        }
+    }
+}
+
+pipeline {
+    agent any
+    environment {
+        MY_VAR = 'some_value'
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo "${env.MY_VAR}"  // Accessing the environment variable
+            }
+        }
+    }
+}
+------------------------------------------
+Jenkins, especially when you're using the Pipeline plugin. It is automatically set by Jenkins based on the branch being built. You do not need to explicitly declare BRANCH_NAME as it is injected into the environment by Jenkins.
+-------------------------------------------
+pipeline{
+agent any
+tools{
+}
+stages{
+    stage{
+       steps{
+            }
+          }
+    stage{
+        steps{
+           }
+         }
+      }
+----------------------------------
+pipeline {
+    agent none 
+
+    tools {
+        maven 'maven' 
+    }
+
+    environment {
+        NODE_LABEL = "${env.BRANCH_NAME == 'Prod' ? 'prod-node' : (env.BRANCH_NAME == 'Test' ? 'test-node' : 'dev-node')}"
+    }
+
+    stages {
+        stage('Check out code from Git') {
+            agent {
+                label "${env.NODE_LABEL}" 
+            }
+            steps {
+                script {
+                    checkout scm
+                    stash name: 'source-code1', includes: '**/*'
+                }
+            }
+        }
+        stage('Build artifact') {
+            agent {
+                label "${env.NODE_LABEL}"
+            }
+            steps {
+                script {
+                    unstash 'source-code1'
+                    withMaven(maven: 'maven') {
+                        sh 'mvn clean package'
+                    }
+                }
+            }
+        }
+    }
+}
+-------------------------
+pipeline {
+    agent none 
+
+    tools {
+        maven 'maven' 
+    }
+
+    environment {
+        NODE_LABEL = "${env.BRANCH_NAME == 'Prod' ? 'prod-node' : (env.BRANCH_NAME == 'Test' ? 'test-node' : 'dev-node')}"
+    }
+
+    stages {
+        stage('Check out code from Git') {
+            agent {
+                label "${env.NODE_LABEL}" 
+            }
+            steps {
+                script {
+                    checkout scm
+                    stash name: 'source-code1', includes: '**/*'
+                }
+            }
+        }
+        stage('Build artifact') {
+            agent {
+                label "${env.NODE_LABEL}"
+            }
+            steps {
+                script {
+                    unstash 'source-code1'
+                    withMaven(maven: 'maven') {
+                        sh 'mvn clean package'
+                    }
+                }
+            }
+        }
+    }
+}
+-----------------------
+   NODE_LABEL = "${env.BRANCH_NAME == 'dev' ? 'dev-node' : (env.BRANCH_NAME == 'test' ? 'test-node' : (env.BRANCH_NAME == 'UAT' ? 'UAT-node' : 'prod-node'))}"
