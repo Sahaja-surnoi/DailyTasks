@@ -1,0 +1,80 @@
+AWS- CFT
+Azure- Azure Resource manager
+Openstack- Heat templates
+---------------------------------
+Uses Hashicorp Language(HCL)
+---------------------------------
+Crossplane is one of IAC
+--------------------------------
+Terraform?
+-Infrastructure as code and API as code(converts HCL to AWS APIs)
+
+**Why?
+-we can use in multiple clouds(universal approach), we can mention what cloud is used in providers
+-Highly available infrastructure
+---------------------------------------
+AKIATCKAM64VHNYTA6**
+h9ksfaFtV2oId3AZpqeC5D1KVmAxEDX9EeBV***
+----------------------------------------
+step1
+install terraform for windows
+install aws cli for windows
+add both paths in env variables in advanced settings
+
+step2
+-Go to VS code
+-check both versions
+-do aws configure and give token and secret key generated in iam 
+-check aws s3 ls-> check all the s3 buckets are reflecting or not
+
+step3
+-terraform init
+-terraform plan(gives overview of whats going to be created)
+-terraform apply
+--------------------------------------
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"  # You can specify a version that suits your needs
+    }
+  }
+}
+
+provider "aws" {
+  region     = "ap-northeast-2"
+  access_key = "**"
+  secret_key = "**"
+}
+
+resource "aws_instance" "this" {
+  ami             = "ami-008d41dbe16db6778"
+  instance_type   = "t2.micro"
+}
+-----------------------------------------------
+
+provider "aws" {
+  region     = "ap-northeast-2"
+  access_key = "**"
+  secret_key = "**"
+}
+
+resource "aws_instance" "this" {
+  ami             = "ami-008d41dbe16db6778"
+  instance_type   = "t2.micro"
+}
+
+  tags = {
+    Name = "Terraforminstance"
+}
+
+--------------------------------------
+implement configure docker, pull image and run container
+----------------------------------------
+Variables
+-input varibles(pass some information to terraform)
+ex:giving ami in variable instead in resource
+-output variables(print particular value in output)
+
+
