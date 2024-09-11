@@ -1,0 +1,15 @@
+git branch(list out the branches, green coloured branch is yours)
+git checkout dev1 or dev2(If you are not in your branch checkout to your branch)
+git pull origin master
+git status
+git add .(moves untracked files i.e red colour to tracked files i.e green colour)
+git commit -m ""(commits the code to your local)
+git pull origin master(pull the code before push, so you can push code to updated code in master)
+git push origin dev1 or dev2
+-------------------------------------------------------------
+go to github and raise pull req
+merge pull req
+--------------------------------------------------------------
+Note: Do not work on master branch, must checkout to your own branch(dev1 or dev2) 
+
+
