@@ -22,4 +22,22 @@ WORKDIR /home/app/
 COPY HospitalAppointment-0.0.1-SNAPSHOT.jar /home/app
 CMD ["nohup", "java" , "-jar" , "HospitalAppointment-0.0.1-SNAPSHOT.jar","&"]
 -----------------------------------------------------------------------------
+FROM amazonlinux:2
+RUN yum update -y && yum install -y nginx
+ 
+# Copy the default Nginx configuration file if needed
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+ 
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+-----------------------------------------------------------------------------
+FROM amazonlinux:2
+RUN yum update -y && \
+    yum install -y httpd && \
+    yum clean all
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+EXPOSE 80
+CMD ["httpd", "-D", "FOREGROUND"]
 
